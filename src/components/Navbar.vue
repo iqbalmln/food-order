@@ -1,6 +1,6 @@
 <template>
-  <nav class="navbar navbar-expand-lg">
-    <div class="container">
+  <nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
       <a class="navbar-brand text-secondary" href="#">Resto</a>
       <button
         class="navbar-toggler"
@@ -16,10 +16,14 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <router-link class="nav-link text-secondary" to="/">Home</router-link>
+            <router-link class="nav-link text-secondary" to="/"
+              >Home</router-link
+            >
           </li>
           <li class="nav-item">
-            <router-link class="nav-link text-secondary" to="/foods">Foods</router-link>
+            <router-link class="nav-link text-secondary" to="/foods"
+              >Foods</router-link
+            >
           </li>
         </ul>
         <ul class="navbar-nav ml-auto">

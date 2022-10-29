@@ -11,3 +11,12 @@
 .badge-success {
   background-color: #4EB883 !important;
 }
+.breadcrumb {
+  background-color: transparent !important;
+  padding: 0;
+  color: #000 !important;
+}
+.breadcrumb-item.active {
+  font-weight: bold !important;
+  color: #000 !important;
+}
