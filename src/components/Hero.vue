@@ -13,7 +13,7 @@
           </div>
         </div>
         <div class="col-md-6">
-          <img src="@/assets/img/hero.png" width="100%" alt="" />
+          <img src="@/assets/hero.png" width="100%" alt="" />
         </div>
       </div>
     </div>
@@ -22,7 +22,7 @@
     <div class="d-block d-md-none">
       <div class="row">
         <div class="col-md-6 mb-3">
-          <img src="../assets/img/hero.png" width="100%" alt="" />
+          <img src="@/assets/hero.png" width="100%" alt="" />
         </div>
         <div class="col-md-6 d-flex align-items-center">
           <div class="text-center">

@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <Navbar />
     <div class="container mt-4">
       <Hero />
       <div class="row mt-4">
@@ -21,6 +22,7 @@
             :nama="product.nama"
             :gambar="product.gambar"
             :harga="product.harga"
+            :id="product.id"
           />
         </div>
       </div>
@@ -33,12 +35,14 @@
 import Hero from '../components/Hero.vue'
 import CardProduct from '../components/CardProduct.vue'
 import axios from "axios"
+import Navbar from '../components/Navbar.vue'
 export default {
   name: 'HomeView',
   components: {
     Hero,
-    CardProduct
-  },
+    CardProduct,
+    Navbar
+},
   data() {
     return {
       products: []
