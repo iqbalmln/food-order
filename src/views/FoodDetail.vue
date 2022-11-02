@@ -49,7 +49,7 @@
               />
             </div>
             <div class="form-group">
-              <label>Keterangam</label>
+              <label>Keterangan</label>
               <textarea
                 class="form-control"
                 placeholder="Keterangan spt : Pedas, Nasi setengah .."

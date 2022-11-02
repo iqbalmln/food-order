@@ -31,7 +31,10 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(keranjang, index) in keranjangs" :key="keranjang.id">
+                <tr
+                  v-for="(keranjang, index) in keranjangs"
+                  :key="keranjang.id"
+                >
                   <th>{{ index + 1 }}</th>
                   <td>
                     <img
@@ -54,7 +57,7 @@
                   </td>
                   <td align="center" class="text-danger">
                     <b-icon-trash
-                      style="cursor: pointer;"
+                      style="cursor: pointer"
                       @click="deleteKeranjang(keranjang.id)"
                     ></b-icon-trash>
                   </td>
@@ -68,6 +71,32 @@
           </div>
         </div>
       </div>
+      <!-- Form checkout -->
+      <div class="row justify-content-end">
+        <div class="col-md-4">
+          <form @submit.prevent>
+            <div class="form-group">
+              <label for="nama">Nama :</label>
+              <input type="text" class="form-control" v-model="pesan.nama" />
+            </div>
+            <div class="form-group">
+              <label fo="noMeja">No Meja :</label>
+              <textarea
+                class="form-control"
+                placeholder="noMeja spt : Pedas, Nasi setengah .."
+                v-model="pesan.noMeja"
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              class="btn btn-success float-right"
+              @click="checkout()"
+            >
+              <b-icon-cart></b-icon-cart> Pesan
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -77,59 +106,100 @@ import axios from "axios";
 import Navbar from "../components/Navbar.vue";
 
 export default {
-    name: "Keranjang",
-    data() {
-        return {
-            keranjangs: [],
-        };
+  name: "Keranjang",
+  data() {
+    return {
+      keranjangs: [],
+      pesan: {},
+    };
+  },
+  methods: {
+    setKeranjang(data) {
+      this.keranjangs = data;
     },
-    methods: {
-        setKeranjang(data) {
-            this.keranjangs = data;
-        },
-        deleteKeranjang(id) {
-            axios
-                .delete("http://localhost:3000/keranjangs/" + id)
-                .then(() => {
-                this.$toast.error("Pesanan dihapus!", {
-                    type: "error",
-                    position: "top-right",
-                    duration: 3000,
-                    dismissible: true,
-                });
-                // Reload page for user cart update
-                axios
-                    .get("http://localhost:3000/keranjangs")
-                    .then((response) => {
-                    this.setKeranjang(response.data);
-                })
-                    .catch((err) => {
-                    console.log("gagal :", err);
-                });
-            })
-                .catch((err) => {
-                console.log("gagal :", err);
-            });
-        },
-    },
-    mounted() {
-        axios
+    deleteKeranjang(id) {
+      axios
+        .delete("http://localhost:3000/keranjangs/" + id)
+        .then(() => {
+          this.$toast.error("Pesanan dihapus!", {
+            type: "error",
+            position: "top-right",
+            duration: 3000,
+            dismissible: true,
+          });
+          // Reload page for user cart update
+          axios
             .get("http://localhost:3000/keranjangs")
             .then((response) => {
-            this.setKeranjang(response.data);
-        })
+              this.setKeranjang(response.data);
+            })
             .catch((err) => {
-            console.log("gagal :", err);
+              console.log("gagal :", err);
+            });
+        })
+        .catch((err) => {
+          console.log("gagal :", err);
         });
     },
-    computed: {
-        totalHarga() {
-            return this.keranjangs.reduce((items, data) => {
-                return items + data.product.harga * data.jumlah_pemesanan;
-            }, 0);
-        },
+    checkout() {
+      if (this.pesan.nama && this.pesan.noMeja) {
+        this.pesan.kerajangs = this.keranjangs;
+        axios
+          .post("http://localhost:3000/pesanans", this.pesan)
+          .then(() => {
+            // Hapus keranjang
+            this.keranjangs.map((item) => {
+              return axios
+                .delete("http://localhost:3000/keranjangs/" + item.id)
+                .catch((error) => console.log(error));
+            });
+            // redirect pesanan sukses page
+            this.$router.push({ path: "/pesanan-sukses" });
+
+            // pop-up notification
+            this.$toast.success("Berhasil Memesan!", {
+              type: "success",
+              position: "top-right",
+              duration: 3000,
+              dismissible: true,
+            });
+          })
+          .catch(() => {
+            this.$toast.error("Gagal Memesan!", {
+              type: "error",
+              position: "top-right",
+              duration: 3000,
+              dismissible: true,
+            });
+          });
+      } else {
+        this.$toast.error("Nama dan nomor meja harus diisi!", {
+          type: "error",
+          position: "top-right",
+          duration: 3000,
+          dismissible: true,
+        });
+      }
     },
-    components: { Navbar }
+  },
+  mounted() {
+    axios
+      .get("http://localhost:3000/keranjangs")
+      .then((response) => {
+        this.setKeranjang(response.data);
+      })
+      .catch((err) => {
+        console.log("gagal :", err);
+      });
+  },
+  computed: {
+    totalHarga() {
+      return this.keranjangs.reduce((items, data) => {
+        return items + data.product.harga * data.jumlah_pemesanan;
+      }, 0);
+    },
+  },
+  components: { Navbar },
 };
 </script>
 
